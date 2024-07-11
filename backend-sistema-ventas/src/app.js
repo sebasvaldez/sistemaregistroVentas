@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use("/api", authRoutes);
 app.use("/api", categoriesRoutes);
 app.use("/api", customerRoutes);
-app.use("/api", productRoutes)
-app.use("/api",saleRoutes)
+app.use("/api", productRoutes);
+app.use("/api", saleRoutes);
 
 export default app;
