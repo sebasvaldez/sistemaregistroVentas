@@ -6,10 +6,12 @@ import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
+import { Alert } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../contexts/Authcontext";
 
 const defaultTheme = createTheme();
 
@@ -26,6 +28,10 @@ export const LoginForm = ({ loginClick, randomImage }) => {
     });
   };
 
+  const { state } = useContext(AuthContext);
+
+  console.log(state.message);
+
   const hanldleSubmit = (e) => {
     e.preventDefault();
     loginClick(userData);
@@ -35,9 +41,7 @@ export const LoginForm = ({ loginClick, randomImage }) => {
     <ThemeProvider theme={defaultTheme}>
       <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
-        <div>
-          
-        </div>
+        <div></div>
         <Grid
           item
           xs={false}
@@ -76,6 +80,9 @@ export const LoginForm = ({ loginClick, randomImage }) => {
               onSubmit={hanldleSubmit}
               sx={{ mt: 1 }}
             >
+              {state.message.length > 1 ? (
+                <Alert severity="error">{state.message}</Alert>
+              ) : null}
               <TextField
                 margin="normal"
                 required

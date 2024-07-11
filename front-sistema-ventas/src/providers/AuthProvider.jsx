@@ -27,6 +27,29 @@ export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(AuthReducer, initialValues);
   const [loading, setLoading] = useState(true);
 
+
+  const register = async () =>{
+    setLoading(true);
+    try {
+      const {date} = await registerRequest(user);
+      console.log(date)
+      setLoading(false);
+     
+      Cookies.set("token", data.token);
+
+      dispatch({
+        type: types.auth.register,
+        payload: {message: "Usuario creado con exito"}
+      })
+
+
+
+      
+    } catch (error) {
+      
+    }
+  }
+
   const login = async (user) => {
     try {
       const { data } = await loginRequest(user);
@@ -48,7 +71,6 @@ export const AuthProvider = ({ children }) => {
         payload: objectStorage,
       });
     } catch (error) {
-      console.log(error.response.data[0]);
       dispatch({
         type: types.auth.errorMsg,
         payload: error.response.data[0],
@@ -105,6 +127,10 @@ export const AuthProvider = ({ children }) => {
       console.log(error);
     }
   };
+
+
+
+
 
   return (
     <AuthContext.Provider value={{ state, login, loading, logout, checkToken }}>

@@ -2,6 +2,7 @@ export const types = {
   auth: {
     login: "LOGIN [Auth]",
     logout: "LOGOUT [Auth]",
+    register: "REGISTER [Auth]",
     errorMsg: "ERROR [Auth]",
   },
   product: {

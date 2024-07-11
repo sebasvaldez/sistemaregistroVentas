@@ -35,9 +35,11 @@ export const DrawerDashboard = (props) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
 
-  const [component, setComponent] = useState("Aqui va el componentente con las opciones por default");
+  const [component, setComponent] = useState(
+    "Aqui va el componentente con las opciones por default"
+  );
 
-  const handleComponent= (text)=>{
+  const handleComponent = (text) => {
     switch (text) {
       case "Vendedores":
         setComponent(<DashboardVendedores />);
@@ -55,7 +57,7 @@ export const DrawerDashboard = (props) => {
         setComponent(null);
         break;
     }
-  }
+  };
 
   const handleLogout = () => {
     logout();
@@ -85,7 +87,7 @@ export const DrawerDashboard = (props) => {
         {["Vendedores", "Productos", "Ventas", "Clientes"].map(
           (text, index) => (
             <ListItem key={text} disablePadding>
-              <ListItemButton onClick={()=>handleComponent(text)}>
+              <ListItemButton onClick={() => handleComponent(text)}>
                 <ListItemIcon>
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
@@ -183,9 +185,7 @@ export const DrawerDashboard = (props) => {
         }}
       >
         <Toolbar />
-        {component }
-        
-
+        {component}
       </Box>
     </Box>
   );

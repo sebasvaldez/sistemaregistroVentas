@@ -27,7 +27,6 @@ export const LoginPage = () => {
     login(data);
   };
 
-  console.log(state.message)
 
   useEffect(() => {
    if(isLogged && rol.includes("admin")) {
