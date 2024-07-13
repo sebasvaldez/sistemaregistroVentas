@@ -24,6 +24,9 @@ const initialValues = {
   message: "",
 };
 export const AuthProvider = ({ children }) => {
+
+
+
   const [state, dispatch] = useReducer(AuthReducer, initialValues);
   const [loading, setLoading] = useState(true);
 
@@ -51,6 +54,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   const login = async (user) => {
+    
     try {
       const { data } = await loginRequest(user);
       setLoading(false);

@@ -12,4 +12,11 @@ export const types = {
     get: "GET [Product]",
     getAll: "GET_ALL [Product]",
   },
+  clients: {
+    add: "ADD [Client]",
+    delete: "DELETE [Client]",
+    update: "UPDATE [Client]",
+    get: "GET [Client]",
+    getAll: "GET_ALL [Client]",
+  },
 };

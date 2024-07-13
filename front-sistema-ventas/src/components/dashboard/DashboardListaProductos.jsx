@@ -1,20 +1,24 @@
-import { useState, useEffect } from "react"
-import {getProductsRequest} from "../../config/axiosConnection.js"
-import {TableProducts} from "./tables/TableProducts.jsx"
+import { useEffect, useContext } from "react";
+import { TableProducts } from "./tables/TableProducts.jsx";
+import { ProductsContext } from "../../contexts/ProductsContext.jsx";
 
 export const DashboardListaProductos = () => {
-  const [products, setProducts] = useState([]);
+  const { state, getAllProducts } = useContext(ProductsContext);
+
+  const { products, isLoading } = state;
 
   useEffect(() => {
-    const getProducts = async () =>{
-      const {data} = await getProductsRequest();
-      setProducts(data);
-      console.log(data)
-    }
-    getProducts();
-  }, []);
+    getAllProducts();
+    console.log("Me ejecuté")
+  }, [isLoading]);
 
   return (
-    <div>{<TableProducts products = {products}/>}</div>
-  )
-}
+    <>
+      {isLoading ? (
+        <h1>Cargando...</h1>
+      ) : (
+        <div>{<TableProducts products={products} />}</div>
+      )}
+    </>
+  );
+};
