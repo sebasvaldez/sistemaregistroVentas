@@ -30,7 +30,6 @@ export const LoginForm = ({ loginClick, randomImage }) => {
 
   const { state } = useContext(AuthContext);
 
-  console.log(state.message);
 
   const hanldleSubmit = (e) => {
     e.preventDefault();

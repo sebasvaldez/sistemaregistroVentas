@@ -190,24 +190,3 @@ export const DrawerDashboard = (props) => {
     </Box>
   );
 };
-
-// onClick={() => {
-//   switch (text) {
-//     case "Vendedores":
-//       navigate("/dashboard/admin/vendedores");
-//       break;
-//     case "Productos":
-//       navigate("/dashboard/admin/productos");
-//       break;
-//     case "Ventas":
-//       navigate("/dashboard/admin/ventas");
-//       break;
-//     case "Clientes":
-//       navigate("/dashboard/admin/clientes");
-//       break;
-//     default:
-//       navigate("/dashboard/admin");
-//       break;
-
-//   }
-// }}

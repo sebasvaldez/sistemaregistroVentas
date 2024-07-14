@@ -9,8 +9,7 @@ export const DashboardListaProductos = () => {
 
   useEffect(() => {
     getAllProducts();
-    console.log("Me ejecuté")
-  }, [isLoading]);
+  }, []);
 
   return (
     <>

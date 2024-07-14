@@ -25,3 +25,5 @@ export const logoutRequest = async ()=> axiosConnection.post("/logout");
 
 export const getProductsRequest = async () => axiosConnection.get("/get-products");
 export const getProductRequest = async (id) => axiosConnection.get(`/get-product/${id}`);
+export const deleteProductRequest = async (id) => axiosConnection.delete(`/delete-product/${id}`);
+export const updateProductRequest = async (id, product) => axiosConnection.put(`/update-product/${id}`, product);

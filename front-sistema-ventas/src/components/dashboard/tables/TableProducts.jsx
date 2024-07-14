@@ -1,15 +1,46 @@
-import * as React from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  Icon,
+} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useContext } from "react";
+import { ProductsContext } from "../../../contexts/ProductsContext";
+import Swal from "sweetalert2";
 
 export const TableProducts = ({ products }) => {
+  const { state, deleteProduct } = useContext(ProductsContext);
+
+ 
+
+  const deleteProductById = (id) => {
+    Swal.fire({
+      title: "Cuidado!",
+      text: "Realmente quieres elimiar el producto de la base de datos?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteProduct(id);
+        Swal.fire({
+          title: "Borrado!",
+          text: "El producto fue borrado.",
+          icon: "success",
+        });
+      }
+    });
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
@@ -28,13 +59,15 @@ export const TableProducts = ({ products }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {products.map((product, index) => (
-            <TableRow
-              key={index}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
+          {products.map((product) => (
+            <TableRow key={product._id}>
               <TableCell>
-                <EditIcon /> <DeleteIcon />
+                <IconButton>
+                  <EditIcon sx={{ color: "blue", margin: "5px" }} />
+                </IconButton>
+                <IconButton onClick={() => deleteProductById(product._id)}>
+                  <DeleteIcon sx={{ color: "red", margin: "5px" }} />
+                </IconButton>
               </TableCell>
               <TableCell component="th" scope="row">
                 {product.name}
@@ -47,7 +80,9 @@ export const TableProducts = ({ products }) => {
               </TableCell>
               <TableCell align="right">{product.memory.ram}</TableCell>
               <TableCell align="right">{product.memory.storage}</TableCell>
-              <TableCell align="right">{product.image}</TableCell>
+              <TableCell align="right">
+                <img src={product.image} alt="" />
+              </TableCell>
               <TableCell align="right">{product.stock}</TableCell>
             </TableRow>
           ))}
