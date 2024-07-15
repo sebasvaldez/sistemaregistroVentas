@@ -60,8 +60,36 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+
+ const updateProduct = async (id, product) => {
+    dispatch({
+      type: types.product.update,
+      isLoading: true,
+    });
+    try {
+      await updateProductRequest(id, product);
+      dispatch({
+        type: types.product.update,
+        isLoading: false,
+      });
+
+      getAllProducts();
+    } catch (error) {
+
+      dispatch({
+        type: types.product.errorMsg,
+        payload: error.response.data[0],
+      });
+      
+    }
+
+
+
+  
+ }
+
   return (
-    <ProductsContext.Provider value={{ state, getAllProducts, deleteProduct }}>
+    <ProductsContext.Provider value={{ state, getAllProducts, deleteProduct, updateProduct }}>
       {children}
     </ProductsContext.Provider>
   );
