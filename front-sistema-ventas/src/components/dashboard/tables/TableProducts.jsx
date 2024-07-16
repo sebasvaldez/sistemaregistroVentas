@@ -16,6 +16,7 @@ import { useContext } from "react";
 import { ProductsContext } from "../../../contexts/ProductsContext";
 import Swal from "sweetalert2";
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
+import { UploadOutlined } from "@mui/icons-material";
 
 export const TableProducts = ({ products }) => {
   const { state, deleteProduct, updateProduct } = useContext(ProductsContext);
@@ -42,18 +43,26 @@ export const TableProducts = ({ products }) => {
     });
   };
 
+  const onFileInputChange = ({ target }) => {
+    console.log(target.files);
+  };
+
   const updateProductById = (product) => {
     Swal.fire({
       title: "Actualizar producto",
       html: `
-      <input  id="brand" class="swal2-input height:0"  placeholder="Marca" value="${product.brand}">
+     
+      <input  id="brand" class="swal2-input" placeholder="Marca" value="${product.brand}">
+      <
       <input id="model" class="swal2-input" placeholder="Modelo" value="${product.model}">
       <input id="battery" class="swal2-input" placeholder="Bateria" value="${product.battery.capacity}">
       <input id="mainCamera" class="swal2-input" placeholder="Resolución de cámara" value="${product?.mainCamera.resolution}">
+     
+      
       <input id="ram" class="swal2-input" placeholder="RAM" value="${product.memory.ram}">
       <input id="storage" class="swal2-input" placeholder="Almacenamiento" value="${product.memory.storage}">
-      <input id="image" class="swal2-input" placeholder="Imagen" value="${product.image}">
-      <input id="stock" class="swal2-input" placeholder="Stock" value="${product.stock}">
+      <input type="file" onChange={onFileInputChange} />
+     
       `,
       focusConfirm: false,
       preConfirm: () => {

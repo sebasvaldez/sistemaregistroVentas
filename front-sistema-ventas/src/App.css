@@ -17,6 +17,19 @@ body {
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
+
+div:where(.swal2-container) .swal2-input{
+  height: 1em!important;
+}
+
+div:where(.swal2-container) div:where(.swal2-popup){
+  width: 29em!important;
+}
+
+div:where(.swal2-container) h2:where(.swal2-title){
+  padding: .3em!important;
+}
+
 @media all and (min-width: 320px) {
   .login-container {
     padding: 10%;
