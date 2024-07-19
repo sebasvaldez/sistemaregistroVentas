@@ -2,7 +2,6 @@ import { types } from "../types/types.js";
 
 export const ProductsReducer = (state = [], action) => {
   switch (action.type) {
-
     case types.product.add:
       return {
         ...state,
@@ -11,17 +10,16 @@ export const ProductsReducer = (state = [], action) => {
       };
 
     case types.product.delete:
-
       return {
         ...state,
         isLoading: false,
         product: action.payload || {},
       };
 
-      
     case types.product.update:
       return {
         ...state,
+        isLoading: false,
         product: action.payload,
       };
     case types.product.get:
@@ -40,7 +38,7 @@ export const ProductsReducer = (state = [], action) => {
       return {
         ...state,
         message: action.payload,
-      }
+      };
     default:
       return state;
   }

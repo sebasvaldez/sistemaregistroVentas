@@ -60,8 +60,7 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
-
- const updateProduct = async (id, product) => {
+  const updateProduct = async (id, product) => {
     dispatch({
       type: types.product.update,
       isLoading: true,
@@ -75,21 +74,43 @@ export const ProductProvider = ({ children }) => {
 
       getAllProducts();
     } catch (error) {
-
       dispatch({
         type: types.product.errorMsg,
         payload: error.response.data[0],
       });
-      
     }
+  };
+
+  const fileUpload = async (file) => {
+    if (!file) throw new Error("No hay un archivo para subir");
+
+    const cloudUrl = "https://api.cloudinary.com/v1_1/milayrock/upload";
+    const formdata = new FormData();
+    formdata.append("upload_preset", "sistema-ventas");
+    formdata.append("file", file);
+
+    try {
+      const resp = await fetch(cloudUrl, {
+        method: "POST",
+        body: formdata,
+      });
+
+      if (!resp.ok) throw new Error("Error al subir la imagen");
+      const cloudResp = await resp.json();
+      // console.log(cloudResp.secure_url);
+      return cloudResp.secure_url;
+    } catch (error) {
+      console.log(error);
+      throw new Error(error.message);
+    }
+  };
 
 
-
-  
- }
 
   return (
-    <ProductsContext.Provider value={{ state, getAllProducts, deleteProduct, updateProduct }}>
+    <ProductsContext.Provider
+      value={{ state, getAllProducts, deleteProduct, updateProduct, fileUpload }}
+    >
       {children}
     </ProductsContext.Provider>
   );

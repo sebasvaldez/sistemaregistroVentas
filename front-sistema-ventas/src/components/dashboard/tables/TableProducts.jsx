@@ -12,14 +12,20 @@ import {
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ProductsContext } from "../../../contexts/ProductsContext";
 import Swal from "sweetalert2";
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
-import { UploadOutlined } from "@mui/icons-material";
+import { PhotoCamera } from "@mui/icons-material";
+// import { ProductForm } from "./sweetsFunntions/ProductForm";
 
 export const TableProducts = ({ products }) => {
-  const { state, deleteProduct, updateProduct } = useContext(ProductsContext);
+  const { state, deleteProduct, updateProduct, fileUpload } =
+    useContext(ProductsContext);
+  const [secureUrl, setSecureUrl] = useState("sin imagen");
+
+
+
 
   const deleteProductById = (id) => {
     Swal.fire({
@@ -43,29 +49,41 @@ export const TableProducts = ({ products }) => {
     });
   };
 
-  const onFileInputChange = ({ target }) => {
-    console.log(target.files);
+  const onFileInputChange = async ({ target }) => {
+    const file = target.files[0];
+
+    const resp = await fileUpload(file);
+
+    console.log("me ejecuto");
+    setSecureUrl(resp);
   };
 
   const updateProductById = (product) => {
     Swal.fire({
       title: "Actualizar producto",
       html: `
-     
-      <input  id="brand" class="swal2-input" placeholder="Marca" value="${product.brand}">
-      <
-      <input id="model" class="swal2-input" placeholder="Modelo" value="${product.model}">
-      <input id="battery" class="swal2-input" placeholder="Bateria" value="${product.battery.capacity}">
-      <input id="mainCamera" class="swal2-input" placeholder="Resolución de cámara" value="${product?.mainCamera.resolution}">
-     
-      
-      <input id="ram" class="swal2-input" placeholder="RAM" value="${product.memory.ram}">
-      <input id="storage" class="swal2-input" placeholder="Almacenamiento" value="${product.memory.storage}">
-      <input type="file" onChange={onFileInputChange} />
-     
+        <input id="brand" class="swal2-input" placeholder="Marca" value="${product.brand}">
+        <input id="model" class="swal2-input" placeholder="Modelo" value="${product.model}">
+        <input id="battery" class="swal2-input" placeholder="Bateria" value="${product.battery.capacity}">
+        <input id="mainCamera" class="swal2-input" placeholder="Resolución de cámara" value="${product?.mainCamera.resolution}">
+        <input id="ram" class="swal2-input" placeholder="RAM" value="${product.memory.ram}">
+        <input id="storage" class="swal2-input" placeholder="Almacenamiento" value="${product.memory.storage}">
+
+        <label for="fileInput" class="custom-file-upload" ;  ">
+        Subir una imagen 
+        <input type="file" id="fileInput"   />
+        </label>
       `,
       focusConfirm: false,
+      didOpen: () => {
+        document
+          .getElementById("fileInput")
+          .addEventListener("change", onFileInputChange);
+      },
       preConfirm: () => {
+      
+
+
         return {
           brand: document.getElementById("brand").value,
           model: document.getElementById("model").value,
@@ -77,13 +95,13 @@ export const TableProducts = ({ products }) => {
             ram: document.getElementById("ram").value,
             storage: document.getElementById("storage").value,
           },
-          image: document.getElementById("image").value,
-          stock: document.getElementById("stock").value,
+          image: secureUrl || "",
         };
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        updateProduct(product._id, result.value);
+        // updateProduct(product._id, result.value);
+        console.log(result.value);
         Swal.fire({
           title: "Actualizado!",
           text: "El producto fue actualizado.",
@@ -92,6 +110,10 @@ export const TableProducts = ({ products }) => {
       }
     });
   };
+
+
+
+
 
   return (
     <TableContainer component={Paper}>
