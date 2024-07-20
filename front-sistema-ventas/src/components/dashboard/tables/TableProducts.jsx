@@ -16,14 +16,18 @@ import { useContext, useEffect, useState } from "react";
 import { ProductsContext } from "../../../contexts/ProductsContext";
 import Swal from "sweetalert2";
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
-import { PhotoCamera } from "@mui/icons-material";
-// import { ProductForm } from "./sweetsFunntions/ProductForm";
+import { ModalProducts } from "./ModalProducts";
 
 export const TableProducts = ({ products }) => {
-  const { state, deleteProduct, updateProduct, fileUpload } =
-    useContext(ProductsContext);
-  const [secureUrl, setSecureUrl] = useState("sin imagen");
+  const { state, deleteProduct, updateProduct, fileUpload } = useContext(ProductsContext);
+  const { isLoading } = state;
 
+  const [open, setOpen] = useState(false);
+
+  const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
 
 
@@ -55,65 +59,17 @@ export const TableProducts = ({ products }) => {
     const resp = await fileUpload(file);
 
     console.log("me ejecuto");
+    console.log(file);
     setSecureUrl(resp);
   };
 
   const updateProductById = (product) => {
-    Swal.fire({
-      title: "Actualizar producto",
-      html: `
-        <input id="brand" class="swal2-input" placeholder="Marca" value="${product.brand}">
-        <input id="model" class="swal2-input" placeholder="Modelo" value="${product.model}">
-        <input id="battery" class="swal2-input" placeholder="Bateria" value="${product.battery.capacity}">
-        <input id="mainCamera" class="swal2-input" placeholder="Resolución de cámara" value="${product?.mainCamera.resolution}">
-        <input id="ram" class="swal2-input" placeholder="RAM" value="${product.memory.ram}">
-        <input id="storage" class="swal2-input" placeholder="Almacenamiento" value="${product.memory.storage}">
+    setSelectedProduct(product);
+    handleOpen();
 
-        <label for="fileInput" class="custom-file-upload" ;  ">
-        Subir una imagen 
-        <input type="file" id="fileInput"   />
-        </label>
-      `,
-      focusConfirm: false,
-      didOpen: () => {
-        document
-          .getElementById("fileInput")
-          .addEventListener("change", onFileInputChange);
-      },
-      preConfirm: () => {
-      
-
-
-        return {
-          brand: document.getElementById("brand").value,
-          model: document.getElementById("model").value,
-          battery: { capacity: document.getElementById("battery").value },
-          mainCamera: {
-            resolution: document.getElementById("mainCamera").value,
-          },
-          memory: {
-            ram: document.getElementById("ram").value,
-            storage: document.getElementById("storage").value,
-          },
-          image: secureUrl || "",
-        };
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // updateProduct(product._id, result.value);
-        console.log(result.value);
-        Swal.fire({
-          title: "Actualizado!",
-          text: "El producto fue actualizado.",
-          icon: "success",
-        });
-      }
-    });
+    console.log(product)
+    
   };
-
-
-
-
 
   return (
     <TableContainer component={Paper}>
@@ -164,6 +120,7 @@ export const TableProducts = ({ products }) => {
           ))}
         </TableBody>
       </Table>
+      <ModalProducts open={open} handleClose={handleClose} product={selectedProduct} />
     </TableContainer>
   );
 };
