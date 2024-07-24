@@ -7,7 +7,6 @@ import {
   TableRow,
   Paper,
   IconButton,
-  Icon,
   TextField,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
@@ -19,17 +18,20 @@ import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import { ModalProducts } from "./ModalProducts";
 
 export const TableProducts = ({ products }) => {
-  const { state, deleteProduct, updateProduct, fileUpload } = useContext(ProductsContext);
-  const { isLoading } = state;
+  const { state, deleteProduct, updateProduct, fileUpload, setCurrentProduct } =
+    useContext(ProductsContext);
+
+  const [imageUrl, setImageUrl] = useState("");
 
   const [open, setOpen] = useState(false);
 
-  const [selectedProduct, setSelectedProduct] = useState(null);
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setImageUrl("");
+  };
 
   const deleteProductById = (id) => {
     Swal.fire({
@@ -53,22 +55,13 @@ export const TableProducts = ({ products }) => {
     });
   };
 
-  const onFileInputChange = async ({ target }) => {
-    const file = target.files[0];
-
-    const resp = await fileUpload(file);
-
-    console.log("me ejecuto");
-    console.log(file);
-    setSecureUrl(resp);
-  };
-
-  const updateProductById = (product) => {
-    setSelectedProduct(product);
+  const updateProductById = async (product) => {
     handleOpen();
+    setCurrentProduct(product);
 
-    console.log(product)
-    
+    try {
+      await fileUpload;
+    } catch (error) {}
   };
 
   return (
@@ -120,7 +113,16 @@ export const TableProducts = ({ products }) => {
           ))}
         </TableBody>
       </Table>
-      <ModalProducts open={open} handleClose={handleClose} product={selectedProduct} />
+      {
+        open && (
+          <ModalProducts
+            open={open}
+            handleClose={handleClose}
+            imageUrl={imageUrl}
+            setImageUrl={setImageUrl}
+          />)
+
+      }
     </TableContainer>
   );
 };

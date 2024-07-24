@@ -20,8 +20,16 @@ export const ProductsReducer = (state = [], action) => {
       return {
         ...state,
         isLoading: false,
-        product: action.payload,
+        product: action.payload ,
       };
+
+      case types.product.setCurrent:
+
+      return{
+        ...state,
+        currentProduct: action.payload
+      }
+
     case types.product.get:
       return {
         ...state,

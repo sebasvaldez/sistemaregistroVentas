@@ -12,6 +12,7 @@ import { ProductsReducer } from "../reducers/ProductsReducer";
 export const ProductProvider = ({ children }) => {
   const initialValues = {
     products: [],
+    currentProduct: {},
     isLoading: false,
   };
 
@@ -69,6 +70,7 @@ export const ProductProvider = ({ children }) => {
       await updateProductRequest(id, product);
       dispatch({
         type: types.product.update,
+        payload: product,
         isLoading: false,
       });
 
@@ -81,6 +83,13 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+  const setCurrentProduct = (product) => {
+    dispatch({
+      type: types.product.setCurrent,
+      payload: product,
+    });
+  };
+
   const fileUpload = async (file) => {
     if (!file) throw new Error("No hay un archivo para subir");
 
@@ -88,7 +97,6 @@ export const ProductProvider = ({ children }) => {
     const formdata = new FormData();
     formdata.append("upload_preset", "sistema-ventas");
     formdata.append("file", file);
-
     try {
       const resp = await fetch(cloudUrl, {
         method: "POST",
@@ -96,8 +104,9 @@ export const ProductProvider = ({ children }) => {
       });
 
       if (!resp.ok) throw new Error("Error al subir la imagen");
+
       const cloudResp = await resp.json();
-      // console.log(cloudResp.secure_url);
+
       return cloudResp.secure_url;
     } catch (error) {
       console.log(error);
@@ -105,11 +114,16 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
-
-
   return (
     <ProductsContext.Provider
-      value={{ state, getAllProducts, deleteProduct, updateProduct, fileUpload }}
+      value={{
+        state,
+        getAllProducts,
+        deleteProduct,
+        updateProduct,
+        fileUpload,
+        setCurrentProduct,
+      }}
     >
       {children}
     </ProductsContext.Provider>

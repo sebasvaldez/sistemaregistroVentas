@@ -1,7 +1,10 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import { Typography, TextField } from "@mui/material/";
+import { Typography, TextField, IconButton } from "@mui/material/";
 import Modal from "@mui/material/Modal";
+import { useState, useRef, useContext, useEffect } from "react";
+import { UploadOutlined } from "@mui/icons-material";
+import { ProductsContext } from "../../../contexts/ProductsContext";
 
 const style = {
   position: "absolute",
@@ -15,12 +18,89 @@ const style = {
   p: 4,
 };
 
-export const ModalProducts = ({ open, handleClose, product }) => {
+export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
+  const { state, fileUpload } = useContext(ProductsContext);
+
+  const { currentProduct } = state;
+
+  const { isLoading } = state;
+
+  // console.log(currentProduct)
+  // console.log(isLoading);
+
+  const [currentInputProduct, setCurrentInputProduct] = useState({
+    brand: "",
+    model: "",
+    processor: "",
+    battery: {
+      capacity: "",
+    },
+    mainCamera: {
+      resolution: "",
+    },
+    memory: {
+      ram: "",
+      storage: "",
+    },
+    stock: "",
+    image: "",
+    price: "",
+    screen: {
+      size: "",
+      type: "",
+    },
+  });
+
+  const onFileInputChange = async ({ target }) => {
+    const file = target.files[0];
+    try {
+      const newImageUrl = await fileUpload(file);
+      setImageUrl(newImageUrl);
+      setCurrentInputProduct({
+        ...currentInputProduct,
+        image: newImageUrl,
+      })
+    } catch (error) {}
+
+    console.log("me ejecuto");
+  };
+
+  const fileInputRef = useRef();
+
+  const onInputsChange = (e) => {
+    const { name, value } = e.target;
+    const [mainKey,subKey] = name.split(".");
+
+    if(subKey){
+      setCurrentInputProduct({
+        ...currentInputProduct,
+        [mainKey]: {
+          ...currentInputProduct[mainKey],
+          [subKey]: value,
+        },
+      });
+      return;
+    }
+
+    setCurrentInputProduct({
+      ...currentInputProduct,
+      [name]: value,
+    });
+    
+  };
+
+  // console.log(currentInputProduct);
+
+  useEffect(() => {
+    if(currentProduct){
+      setCurrentInputProduct(currentProduct)
+    }
+  }, [currentProduct]);
+
   return (
     <div>
       <Modal
         open={open}
-        // onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
@@ -31,8 +111,8 @@ export const ModalProducts = ({ open, handleClose, product }) => {
             component="h2"
             sx={{ textAlign: "center", marginBottom: 3 }}
           >
-            {product
-              ? `Editar:  ${product.brand} ${product.model}`
+            {currentProduct
+              ? `Editar:  ${currentProduct.brand} ${currentProduct.model}`
               : "Marca no encontrada"}
           </Typography>
 
@@ -49,70 +129,116 @@ export const ModalProducts = ({ open, handleClose, product }) => {
               label="Marca"
               variant="standard"
               placeholder="Marca"
-              value={product ? product.brand : ""}
+              value={currentInputProduct ? currentInputProduct.brand : ""}
+              name="brand"
+              onChange={onInputsChange}
             />
             <TextField
               label="Modelo"
               variant="standard"
               placeholder="Modelo"
-              value={product ? product.model : ""}
+              value={currentInputProduct ? currentInputProduct.model : ""}
+              name="model"
+              onChange={onInputsChange}
             />
             <TextField
-            label="Procesador"
-            variant="standard"
-            placeholder="Procesador"
-            value={product ? product.processor : ""}
-            
+              label="Procesador"
+              variant="standard"
+              placeholder="Procesador"
+              value={currentInputProduct ? currentInputProduct.processor : ""}
+              name="processor"
+              onChange={onInputsChange}
             />
             <TextField
               label="Bateria"
               variant="standard"
               placeholder="Bateria"
-              value={product ? product.battery.capacity : ""}
+              value={currentInputProduct ? currentInputProduct.battery.capacity : ""}
+              name="battery.capacity"
+              onChange={onInputsChange}
             />
             <TextField
               label="Cámara principal"
               variant="standard"
               placeholder="Cámara"
-              value={product ? product.mainCamera.resolution : ""}
+              value={currentInputProduct ? currentInputProduct.mainCamera.resolution : ""}
+              name="mainCamera.resolution"
+              onChange={onInputsChange}
             />
             <TextField
               label="Memoria RAM"
               variant="standard"
               placeholder="Memoria RAM"
-              value={product ? product.memory.ram : ""}
+              value={currentInputProduct ? currentInputProduct.memory.ram : ""}
+              name="memory.ram"
+              onChange={onInputsChange}
             />
             <TextField
               label="Almacenamiento"
               variant="standard"
               placeholder="Almacenamiento"
-              value={product ? product.memory.storage : ""}
+              value={currentInputProduct ? currentInputProduct.memory.storage : ""}
+              name="memory.storage"
+              onChange={onInputsChange}
             />
 
-            <TextField
-              label="Imagen"
-              variant="standard"
-              placeholder="Imagen"
-              value={product ? product.image : ""}
-            />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "baseline",
+                justifyContent: "space-evenly",
+              }}
+            >
+              <input
+                type="file"
+                style={{ display: "none" }}
+                ref={fileInputRef}
+                onChange={onFileInputChange}
+              />
+              <Typography>Subir una imagen</Typography>
+
+              <IconButton
+                color="primary"
+                disabled={isLoading}
+                onClick={() => fileInputRef.current.click()}
+              >
+                <UploadOutlined />
+              </IconButton>
+            </Box>
 
             <TextField
               label="Stock"
               variant="standard"
               placeholder="Stock"
-              value={product ? product.stock : ""}
+              value={currentInputProduct ? currentInputProduct.stock : ""}
+              name="stock"
+              onChange={onInputsChange}
             />
+            <TextField
+              label="Url de la imagen"
+              variant="standard"
+              placeholder="Url de la imagen"
+              value={imageUrl.length > 0 ? imageUrl  : currentInputProduct?.image}
+              name="image"
+              onChange={onInputsChange}
+            />
+
             <TextField
               label="Precio"
               variant="standard"
               placeholder="Precio"
-              value={product ? product.price : ""}
+              value={currentInputProduct ? currentInputProduct.price : ""}
+              name="price"
+              onChange={onInputsChange}
             />
             <TextField
               label="Tamaño de la pantalla"
               variant="standard"
               placeholder="Tamaño de la pantalla"
-              value={product ? product.screen.size : ""}
+              value={currentInputProduct.screen ? currentInputProduct.screen.size : ""}
+              name="screen.size"
+              onChange={onInputsChange}
             />
           </Box>
           <Box
@@ -124,10 +250,12 @@ export const ModalProducts = ({ open, handleClose, product }) => {
               flexWrap: "wrap",
             }}
           >
-            <Button>Actualizar</Button>
             <Button
-            onClick={handleClose}
-            >Cancelar</Button>
+            onClick={() => {
+              console.log(currentInputProduct);
+            }}
+            >Actualizar</Button>
+            <Button onClick={handleClose}>Cancelar</Button>
           </Box>
         </Box>
       </Modal>

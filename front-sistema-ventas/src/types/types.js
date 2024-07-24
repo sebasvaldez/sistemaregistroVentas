@@ -11,6 +11,7 @@ export const types = {
     update: "UPDATE [Product]",
     get: "GET [Product]",
     getAll: "GET_ALL [Product]",
+    setCurrent: "SET_CURRENT [Product]",
     errorMsg: "ERROR [Product]",
   },
   clients: {
