@@ -5,6 +5,7 @@ import Modal from "@mui/material/Modal";
 import { useState, useRef, useContext, useEffect } from "react";
 import { UploadOutlined } from "@mui/icons-material";
 import { ProductsContext } from "../../../contexts/ProductsContext";
+import { Loader } from "./Loader";
 
 const style = {
   position: "absolute",
@@ -19,14 +20,10 @@ const style = {
 };
 
 export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
-  const { state, fileUpload } = useContext(ProductsContext);
+  const { state, fileUpload, updateProduct, isLoading } =
+    useContext(ProductsContext);
 
   const { currentProduct } = state;
-
-  const { isLoading } = state;
-
-  // console.log(currentProduct)
-  // console.log(isLoading);
 
   const [currentInputProduct, setCurrentInputProduct] = useState({
     brand: "",
@@ -59,19 +56,19 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
       setCurrentInputProduct({
         ...currentInputProduct,
         image: newImageUrl,
-      })
+      });
     } catch (error) {}
 
-    console.log("me ejecuto");
+    // console.log("me ejecuto");
   };
 
   const fileInputRef = useRef();
 
   const onInputsChange = (e) => {
     const { name, value } = e.target;
-    const [mainKey,subKey] = name.split(".");
+    const [mainKey, subKey] = name.split(".");
 
-    if(subKey){
+    if (subKey) {
       setCurrentInputProduct({
         ...currentInputProduct,
         [mainKey]: {
@@ -86,14 +83,11 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
       ...currentInputProduct,
       [name]: value,
     });
-    
   };
 
-  // console.log(currentInputProduct);
-
   useEffect(() => {
-    if(currentProduct){
-      setCurrentInputProduct(currentProduct)
+    if (currentProduct) {
+      setCurrentInputProduct(currentProduct);
     }
   }, [currentProduct]);
 
@@ -153,7 +147,9 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
               label="Bateria"
               variant="standard"
               placeholder="Bateria"
-              value={currentInputProduct ? currentInputProduct.battery.capacity : ""}
+              value={
+                currentInputProduct ? currentInputProduct.battery.capacity : ""
+              }
               name="battery.capacity"
               onChange={onInputsChange}
             />
@@ -161,7 +157,11 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
               label="Cámara principal"
               variant="standard"
               placeholder="Cámara"
-              value={currentInputProduct ? currentInputProduct.mainCamera.resolution : ""}
+              value={
+                currentInputProduct
+                  ? currentInputProduct.mainCamera.resolution
+                  : ""
+              }
               name="mainCamera.resolution"
               onChange={onInputsChange}
             />
@@ -177,35 +177,41 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
               label="Almacenamiento"
               variant="standard"
               placeholder="Almacenamiento"
-              value={currentInputProduct ? currentInputProduct.memory.storage : ""}
+              value={
+                currentInputProduct ? currentInputProduct.memory.storage : ""
+              }
               name="memory.storage"
               onChange={onInputsChange}
             />
 
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                alignItems: "baseline",
-                justifyContent: "space-evenly",
-              }}
-            >
-              <input
-                type="file"
-                style={{ display: "none" }}
-                ref={fileInputRef}
-                onChange={onFileInputChange}
-              />
-              <Typography>Subir una imagen</Typography>
-
-              <IconButton
-                color="primary"
-                disabled={isLoading}
-                onClick={() => fileInputRef.current.click()}
+            {isLoading ? (
+              <Loader />
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "row",
+                  alignItems: "baseline",
+                  justifyContent: "space-evenly",
+                }}
               >
-                <UploadOutlined />
-              </IconButton>
-            </Box>
+                <input
+                  type="file"
+                  style={{ display: "none" }}
+                  ref={fileInputRef}
+                  onChange={onFileInputChange}
+                />
+                <Typography>Subir una imagen</Typography>
+
+                <IconButton
+                  color="primary"
+                  disabled={isLoading}
+                  onClick={() => fileInputRef.current.click()}
+                >
+                  <UploadOutlined />
+                </IconButton>
+              </Box>
+            )}
 
             <TextField
               label="Stock"
@@ -219,7 +225,9 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
               label="Url de la imagen"
               variant="standard"
               placeholder="Url de la imagen"
-              value={imageUrl.length > 0 ? imageUrl  : currentInputProduct?.image}
+              value={
+                imageUrl.length > 0 ? imageUrl : currentInputProduct?.image
+              }
               name="image"
               onChange={onInputsChange}
             />
@@ -236,7 +244,11 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
               label="Tamaño de la pantalla"
               variant="standard"
               placeholder="Tamaño de la pantalla"
-              value={currentInputProduct.screen ? currentInputProduct.screen.size : ""}
+              value={
+                currentInputProduct.screen
+                  ? currentInputProduct.screen.size
+                  : ""
+              }
               name="screen.size"
               onChange={onInputsChange}
             />
@@ -251,10 +263,13 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
             }}
           >
             <Button
-            onClick={() => {
-              console.log(currentInputProduct);
-            }}
-            >Actualizar</Button>
+              onClick={() => {
+                updateProduct(currentInputProduct._id, currentInputProduct);
+                handleClose();
+              }}
+            >
+              Actualizar
+            </Button>
             <Button onClick={handleClose}>Cancelar</Button>
           </Box>
         </Box>

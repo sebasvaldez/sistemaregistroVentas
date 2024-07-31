@@ -8,6 +8,7 @@ import {
   Paper,
   IconButton,
   TextField,
+  
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -16,10 +17,15 @@ import { ProductsContext } from "../../../contexts/ProductsContext";
 import Swal from "sweetalert2";
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import { ModalProducts } from "./ModalProducts";
+import { ModalImage } from "./ModalImage";
+import { Loader } from "./Loader";
+
 
 export const TableProducts = ({ products }) => {
-  const { state, deleteProduct, updateProduct, fileUpload, setCurrentProduct } =
+  const { state, deleteProduct, setCurrentProduct } =
     useContext(ProductsContext);
+
+    const {isLoading} = state
 
   const [imageUrl, setImageUrl] = useState("");
 
@@ -31,6 +37,16 @@ export const TableProducts = ({ products }) => {
   const handleClose = () => {
     setOpen(false);
     setImageUrl("");
+  };
+
+  const showImage = (url) => {
+    Swal.fire({
+      imageUrl: `${url}`,
+      imageHeight: 400,
+      imageAlt: "Imagen del celular",
+      imageWidth: 400,
+      
+    });
   };
 
   const deleteProductById = (id) => {
@@ -60,9 +76,9 @@ export const TableProducts = ({ products }) => {
     setCurrentProduct(product);
 
     try {
-      await fileUpload;
     } catch (error) {}
   };
+
 
   return (
     <TableContainer component={Paper}>
@@ -104,7 +120,11 @@ export const TableProducts = ({ products }) => {
               <TableCell align="right">{product.memory.ram}</TableCell>
               <TableCell align="right">{product.memory.storage}</TableCell>
               <TableCell align="right">
-                <IconButton>
+                <IconButton
+                  onClick={() => {
+                    showImage(product.image);
+                  }}
+                >
                   <ImageSearchIcon />
                 </IconButton>
               </TableCell>
@@ -113,16 +133,14 @@ export const TableProducts = ({ products }) => {
           ))}
         </TableBody>
       </Table>
-      {
-        open && (
-          <ModalProducts
-            open={open}
-            handleClose={handleClose}
-            imageUrl={imageUrl}
-            setImageUrl={setImageUrl}
-          />)
-
-      }
+      {open && (
+        <ModalProducts
+          open={open}
+          handleClose={handleClose}
+          imageUrl={imageUrl}
+          setImageUrl={setImageUrl}
+        />
+      )}
     </TableContainer>
   );
 };

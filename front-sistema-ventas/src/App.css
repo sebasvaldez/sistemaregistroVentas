@@ -23,7 +23,7 @@ div:where(.swal2-container) .swal2-input{
 }
 
 div:where(.swal2-container) div:where(.swal2-popup){
-  width: 29em!important;
+  width: 27em!important;
 }
 
 div:where(.swal2-container) h2:where(.swal2-title){

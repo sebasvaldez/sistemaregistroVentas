@@ -55,6 +55,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (user) => {
     
+    
     try {
       const { data } = await loginRequest(user);
       setLoading(false);
