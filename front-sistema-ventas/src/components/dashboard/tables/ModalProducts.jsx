@@ -5,7 +5,6 @@ import Modal from "@mui/material/Modal";
 import { useState, useRef, useContext, useEffect } from "react";
 import { UploadOutlined } from "@mui/icons-material";
 import { ProductsContext } from "../../../contexts/ProductsContext";
-import { Loader } from "./Loader";
 
 const style = {
   position: "absolute",
@@ -57,9 +56,9 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
         ...currentInputProduct,
         image: newImageUrl,
       });
-    } catch (error) {}
-
-    // console.log("me ejecuto");
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const fileInputRef = useRef();

@@ -4,6 +4,7 @@ import {
   getProductRequest,
   updateProductRequest,
   deleteProductRequest,
+  addProductRequest,
 } from "../config/axiosConnection";
 import { types } from "../types/types";
 import { useReducer, useState } from "react";
@@ -41,6 +42,29 @@ export const ProductProvider = ({ children }) => {
       });
     }
   };
+
+
+  const createProduct = async (product) => {
+    dispatch({
+      type: types.product.add,
+    });
+
+    try {
+      await addProductRequest(product);
+      dispatch({
+        type: types.product.add,
+        payload: product,
+      });
+
+      getAllProducts();
+    } catch (error) {
+      dispatch({
+        type: types.product.errorMsg,
+        payload: error.response.data[0],
+      });
+    }
+
+  }
 
   const deleteProduct = async (id) => {
     dispatch({
@@ -124,6 +148,7 @@ export const ProductProvider = ({ children }) => {
         state,
         setIsLoading,
         getAllProducts,
+        createProduct,
         deleteProduct,
         updateProduct,
         fileUpload,

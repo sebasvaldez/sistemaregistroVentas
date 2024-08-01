@@ -17,13 +17,17 @@ body {
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
+.swal2-shown swal2-height-auto{
+  padding-right: 0!important;
+}
+
 
 div:where(.swal2-container) .swal2-input{
   height: 1em!important;
 }
 
 div:where(.swal2-container) div:where(.swal2-popup){
-  width: 27em!important;
+  width: 25em!important;
 }
 
 div:where(.swal2-container) h2:where(.swal2-title){

@@ -23,6 +23,9 @@ export const logoutRequest = async () => axiosConnection.post("/logout");
 
 //Rutas de productos
 
+export const addProductRequest = async (product) =>
+  axiosConnection.post("/add-product", product);
+
 export const getProductsRequest = async () =>
   axiosConnection.get("/get-products");
 

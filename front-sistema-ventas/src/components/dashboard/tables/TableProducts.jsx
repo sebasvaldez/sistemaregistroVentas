@@ -7,25 +7,21 @@ import {
   TableRow,
   Paper,
   IconButton,
-  TextField,
-  
+  Box,
+  Button,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { ProductsContext } from "../../../contexts/ProductsContext";
 import Swal from "sweetalert2";
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import { ModalProducts } from "./ModalProducts";
 import { ModalImage } from "./ModalImage";
-import { Loader } from "./Loader";
-
 
 export const TableProducts = ({ products }) => {
-  const { state, deleteProduct, setCurrentProduct } =
+  const { state, deleteProduct, setCurrentProduct, createProduct } =
     useContext(ProductsContext);
-
-    const {isLoading} = state
 
   const [imageUrl, setImageUrl] = useState("");
 
@@ -37,16 +33,6 @@ export const TableProducts = ({ products }) => {
   const handleClose = () => {
     setOpen(false);
     setImageUrl("");
-  };
-
-  const showImage = (url) => {
-    Swal.fire({
-      imageUrl: `${url}`,
-      imageHeight: 400,
-      imageAlt: "Imagen del celular",
-      imageWidth: 400,
-      
-    });
   };
 
   const deleteProductById = (id) => {
@@ -71,16 +57,36 @@ export const TableProducts = ({ products }) => {
     });
   };
 
+  const handleCreateProduct = async () => {
+    console.log("creando producto")
+
+    try {
+    } catch (error) {
+      console.error(error);
+    }
+  };  
+
   const updateProductById = async (product) => {
     handleOpen();
     setCurrentProduct(product);
 
     try {
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-
   return (
+    <Box>
+      <Button
+      sx={{marginBottom: "10px"}}
+      variant="contained"
+      onClick={handleCreateProduct}
+      >
+        agregar Productos
+      </Button>
+
+
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
         <TableHead>
@@ -121,9 +127,7 @@ export const TableProducts = ({ products }) => {
               <TableCell align="right">{product.memory.storage}</TableCell>
               <TableCell align="right">
                 <IconButton
-                  onClick={() => {
-                    showImage(product.image);
-                  }}
+                  onClick={() => ModalImage(product.model, product.image)}
                 >
                   <ImageSearchIcon />
                 </IconButton>
@@ -142,5 +146,6 @@ export const TableProducts = ({ products }) => {
         />
       )}
     </TableContainer>
+    </Box>
   );
 };

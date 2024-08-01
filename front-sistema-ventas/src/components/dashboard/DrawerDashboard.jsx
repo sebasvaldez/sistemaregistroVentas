@@ -17,6 +17,10 @@ import {
 } from "@mui/material/";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
+import GroupsIcon from "@mui/icons-material/Groups";
+import Inventory2Icon from "@mui/icons-material/Inventory2";
+import SellIcon from "@mui/icons-material/Sell";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useAuth } from "../../hooks/useAuth";
 import { useNavigate, Link } from "react-router-dom";
@@ -39,13 +43,19 @@ export const DrawerDashboard = (props) => {
     "Aqui va el componentente con las opciones por default"
   );
 
+  const [activeComponente, setActiveComponente] = useState("");
+
   const handleComponent = (text) => {
+    setActiveComponente(text);
+
     switch (text) {
       case "Vendedores":
         setComponent(<DashboardVendedores />);
+
         break;
       case "Productos":
         setComponent(<DashboardListaProductos />);
+
         break;
       case "Ventas":
         setComponent(<DashboardListaVentas />);
@@ -84,18 +94,38 @@ export const DrawerDashboard = (props) => {
       <Toolbar />
       <Divider />
       <List>
-        {["Vendedores", "Productos", "Ventas", "Clientes"].map(
-          (text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton onClick={() => handleComponent(text)}>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          )
-        )}
+        {["Vendedores", "Productos", "Ventas", "Clientes"].map((text) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton onClick={() => handleComponent(text)}>
+              <ListItemIcon>
+                {text === "Vendedores" ? (
+                  <GroupsIcon
+                    {...(activeComponente === "Vendedores" && {
+                      color: "primary",
+                    })}
+                  />
+                ) : text === "Productos" ? (
+                  <Inventory2Icon
+                    {...(activeComponente === "Productos" && {
+                      color: "primary",
+                    })}
+                  />
+                ) : text === "Ventas" ? (
+                  <SellIcon
+                    {...(activeComponente === "Ventas" && { color: "primary" })}
+                  />
+                ) : text === "Clientes" ? (
+                  <GroupAddIcon
+                    {...(activeComponente === "Clientes" && {
+                      color: "primary",
+                    })}
+                  />
+                ) : null}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
       </List>
       <Divider />
     </div>
