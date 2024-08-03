@@ -53,7 +53,7 @@ export const ProductProvider = ({ children }) => {
       await addProductRequest(product);
       dispatch({
         type: types.product.add,
-        payload: product,
+        
       });
 
       getAllProducts();

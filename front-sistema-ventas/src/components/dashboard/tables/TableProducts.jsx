@@ -18,14 +18,16 @@ import Swal from "sweetalert2";
 import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import { ModalProducts } from "./ModalProducts";
 import { ModalImage } from "./ModalImage";
+import { ModalAdd } from "./ModalAdd";
 
 export const TableProducts = ({ products }) => {
-  const { state, deleteProduct, setCurrentProduct, createProduct } =
+  const { deleteProduct, setCurrentProduct, createProduct } =
     useContext(ProductsContext);
 
   const [imageUrl, setImageUrl] = useState("");
 
   const [open, setOpen] = useState(false);
+  const [openAdd, setOpenAdd] = useState(false);
 
   const handleOpen = () => {
     setOpen(true);
@@ -33,6 +35,13 @@ export const TableProducts = ({ products }) => {
   const handleClose = () => {
     setOpen(false);
     setImageUrl("");
+  };
+
+  const handleOpenAdd = () => {
+    setOpenAdd(true);
+  };
+  const handleCloseAdd = () => {
+    setOpenAdd(false);
   };
 
   const deleteProductById = (id) => {
@@ -57,14 +66,14 @@ export const TableProducts = ({ products }) => {
     });
   };
 
-  const handleCreateProduct = async () => {
-    console.log("creando producto")
+  const createNewProduct = async () => {
+    handleOpenAdd();
 
     try {
     } catch (error) {
       console.error(error);
     }
-  };  
+  };
 
   const updateProductById = async (product) => {
     handleOpen();
@@ -79,73 +88,80 @@ export const TableProducts = ({ products }) => {
   return (
     <Box>
       <Button
-      sx={{marginBottom: "10px"}}
-      variant="contained"
-      onClick={handleCreateProduct}
+        sx={{ marginBottom: "10px" }}
+        variant="contained"
+        onClick={createNewProduct}
       >
         agregar Productos
       </Button>
 
-
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Acciones</TableCell>
-            <TableCell></TableCell>
-            <TableCell align="right">Marca</TableCell>
-            <TableCell align="right">Modelo</TableCell>
-            <TableCell align="right">Bateria</TableCell>
-            <TableCell align="right">Resolución de cámara</TableCell>
-            <TableCell align="right">RAM</TableCell>
-            <TableCell align="right">Almacenamiento</TableCell>
-            <TableCell align="right">Imagen</TableCell>
-            <TableCell align="right">Stock</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {products.map((product) => (
-            <TableRow key={product._id}>
-              <TableCell sx={{ padding: "5px" }}>
-                <IconButton onClick={() => updateProductById(product)}>
-                  <EditIcon sx={{ color: "blue" }} />
-                </IconButton>
-                <IconButton onClick={() => deleteProductById(product._id)}>
-                  <DeleteIcon sx={{ color: "red" }} />
-                </IconButton>
-              </TableCell>
-              <TableCell component="th" scope="row">
-                {product.name}
-              </TableCell>
-              <TableCell align="right">{product.brand}</TableCell>
-              <TableCell align="right">{product.model}</TableCell>
-              <TableCell align="right">{product.battery.capacity}</TableCell>
-              <TableCell align="right">
-                {product.mainCamera.resolution}
-              </TableCell>
-              <TableCell align="right">{product.memory.ram}</TableCell>
-              <TableCell align="right">{product.memory.storage}</TableCell>
-              <TableCell align="right">
-                <IconButton
-                  onClick={() => ModalImage(product.model, product.image)}
-                >
-                  <ImageSearchIcon />
-                </IconButton>
-              </TableCell>
-              <TableCell align="right">{product.stock}</TableCell>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Acciones</TableCell>
+              <TableCell></TableCell>
+              <TableCell align="right">Marca</TableCell>
+              <TableCell align="right">Modelo</TableCell>
+              <TableCell align="right">Bateria</TableCell>
+              <TableCell align="right">Resolución de cámara</TableCell>
+              <TableCell align="right">RAM</TableCell>
+              <TableCell align="right">Almacenamiento</TableCell>
+              <TableCell align="right">Imagen</TableCell>
+              <TableCell align="right">Stock</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-      {open && (
-        <ModalProducts
-          open={open}
-          handleClose={handleClose}
-          imageUrl={imageUrl}
-          setImageUrl={setImageUrl}
-        />
-      )}
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {products.map((product) => (
+              <TableRow key={product._id}>
+                <TableCell sx={{ padding: "5px" }}>
+                  <IconButton onClick={() => updateProductById(product)}>
+                    <EditIcon sx={{ color: "blue" }} />
+                  </IconButton>
+                  <IconButton onClick={() => deleteProductById(product._id)}>
+                    <DeleteIcon sx={{ color: "red" }} />
+                  </IconButton>
+                </TableCell>
+                <TableCell component="th" scope="row">
+                  {product.name}
+                </TableCell>
+                <TableCell align="right">{product.brand}</TableCell>
+                <TableCell align="right">{product.model}</TableCell>
+                <TableCell align="right">{product.battery.capacity}</TableCell>
+                <TableCell align="right">
+                  {product.mainCamera.resolution}
+                </TableCell>
+                <TableCell align="right">{product.memory.ram}</TableCell>
+                <TableCell align="right">{product.memory.storage}</TableCell>
+                <TableCell align="right">
+                  <IconButton
+                    onClick={() => ModalImage(product.model, product.image)}
+                  >
+                    <ImageSearchIcon />
+                  </IconButton>
+                </TableCell>
+                <TableCell align="right">{product.stock}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+        {open && (
+          <ModalProducts
+            open={open}
+            handleClose={handleClose}
+            imageUrl={imageUrl}
+            setImageUrl={setImageUrl}
+          />
+        )}
+        {openAdd && (
+          <ModalAdd
+            open={openAdd}
+            handleClose={handleCloseAdd}
+            imageUrl={imageUrl}
+            setImageUrl={setImageUrl}
+          />
+        )}
+      </TableContainer>
     </Box>
   );
 };

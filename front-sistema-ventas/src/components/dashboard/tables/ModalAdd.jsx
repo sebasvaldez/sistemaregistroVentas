@@ -1,10 +1,9 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import { Typography, TextField, IconButton } from "@mui/material/";
+import { Box, Button, TextField, IconButton } from "@mui/material";
+import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { useState, useRef, useContext, useEffect } from "react";
-import { UploadOutlined } from "@mui/icons-material";
+import { useState, useRef, useContext } from "react";
 import { ProductsContext } from "../../../contexts/ProductsContext";
+import { UploadOutlined } from "@mui/icons-material";
 import { Loader } from "../Loader/Loader";
 
 const style = {
@@ -14,18 +13,15 @@ const style = {
   transform: "translate(-50%, -50%)",
   width: 600,
   bgcolor: "background.paper",
-  border: "1px solid #000",
-  boxShadow: 30,
+  border: "2px solid #000",
+  boxShadow: 24,
   p: 4,
 };
 
-export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
-  const { state, fileUpload, updateProduct, isLoading } =
-    useContext(ProductsContext);
+export const ModalAdd = ({ open, handleClose, imageUrl, setImageUrl }) => {
+  const { fileUpload, isLoading, createProduct } = useContext(ProductsContext);
 
-  const { currentProduct } = state;
-
-  const [currentInputProduct, setCurrentInputProduct] = useState({
+  const [newProduct, setNewProduct] = useState({
     brand: "",
     model: "",
     processor: "",
@@ -53,8 +49,8 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
     try {
       const newImageUrl = await fileUpload(file);
       setImageUrl(newImageUrl);
-      setCurrentInputProduct({
-        ...currentInputProduct,
+      setNewProduct({
+        ...newProduct,
         image: newImageUrl,
       });
     } catch (error) {
@@ -69,27 +65,21 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
     const [mainKey, subKey] = name.split(".");
 
     if (subKey) {
-      setCurrentInputProduct({
-        ...currentInputProduct,
+      setNewProduct({
+        ...newProduct,
         [mainKey]: {
-          ...currentInputProduct[mainKey],
+          ...newProduct[mainKey],
           [subKey]: value,
         },
       });
       return;
     }
 
-    setCurrentInputProduct({
-      ...currentInputProduct,
+    setNewProduct({
+      ...newProduct,
       [name]: value,
     });
   };
-
-  useEffect(() => {
-    if (currentProduct) {
-      setCurrentInputProduct(currentProduct);
-    }
-  }, [currentProduct]);
 
   return (
     <div>
@@ -101,15 +91,12 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
         <Box sx={style}>
           <Typography
             id="modal-modal-title"
-            variant="h6"
+            variant="h5"
             component="h2"
-            sx={{ textAlign: "center", marginBottom: 3 }}
+            sx={{ textAlign: "center" }}
           >
-            {currentProduct
-              ? `Editar:  ${currentProduct.brand} ${currentProduct.model}`
-              : "Marca no encontrada"}
+            Nuevo producto
           </Typography>
-
           <Box
             sx={{
               display: "flex",
@@ -123,7 +110,7 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
               label="Marca"
               variant="standard"
               placeholder="Marca"
-              value={currentInputProduct ? currentInputProduct.brand : ""}
+              value={newProduct.brand}
               name="brand"
               onChange={onInputsChange}
             />
@@ -131,7 +118,7 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
               label="Modelo"
               variant="standard"
               placeholder="Modelo"
-              value={currentInputProduct ? currentInputProduct.model : ""}
+              value={newProduct.model}
               name="model"
               onChange={onInputsChange}
             />
@@ -139,7 +126,7 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
               label="Procesador"
               variant="standard"
               placeholder="Procesador"
-              value={currentInputProduct ? currentInputProduct.processor : ""}
+              value={newProduct.processor}
               name="processor"
               onChange={onInputsChange}
             />
@@ -147,9 +134,7 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
               label="Bateria"
               variant="standard"
               placeholder="Bateria"
-              value={
-                currentInputProduct ? currentInputProduct.battery.capacity : ""
-              }
+              value={newProduct.battery.capacity}
               name="battery.capacity"
               onChange={onInputsChange}
             />
@@ -157,11 +142,7 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
               label="Cámara principal"
               variant="standard"
               placeholder="Cámara"
-              value={
-                currentInputProduct
-                  ? currentInputProduct.mainCamera.resolution
-                  : ""
-              }
+              value={newProduct.mainCamera.resolution}
               name="mainCamera.resolution"
               onChange={onInputsChange}
             />
@@ -169,7 +150,7 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
               label="Memoria RAM"
               variant="standard"
               placeholder="Memoria RAM"
-              value={currentInputProduct ? currentInputProduct.memory.ram : ""}
+              value={newProduct.memory.ram}
               name="memory.ram"
               onChange={onInputsChange}
             />
@@ -177,9 +158,7 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
               label="Almacenamiento"
               variant="standard"
               placeholder="Almacenamiento"
-              value={
-                currentInputProduct ? currentInputProduct.memory.storage : ""
-              }
+              value={newProduct.memory.storage}
               name="memory.storage"
               onChange={onInputsChange}
             />
@@ -217,7 +196,7 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
               label="Stock"
               variant="standard"
               placeholder="Stock"
-              value={currentInputProduct ? currentInputProduct.stock : ""}
+              value={newProduct.stock}
               name="stock"
               onChange={onInputsChange}
             />
@@ -225,9 +204,7 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
               label="Url de la imagen"
               variant="standard"
               placeholder="Url de la imagen"
-              value={
-                imageUrl.length > 0 ? imageUrl : currentInputProduct?.image
-              }
+              value={imageUrl.length > 0 ? imageUrl : newProduct.image}
               name="image"
               onChange={onInputsChange}
             />
@@ -236,7 +213,7 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
               label="Precio"
               variant="standard"
               placeholder="Precio"
-              value={currentInputProduct ? currentInputProduct.price : ""}
+              value={newProduct.price}
               name="price"
               onChange={onInputsChange}
             />
@@ -244,15 +221,12 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
               label="Tamaño de la pantalla"
               variant="standard"
               placeholder="Tamaño de la pantalla"
-              value={
-                currentInputProduct.screen
-                  ? currentInputProduct.screen.size
-                  : ""
-              }
+              value={newProduct.screen.size}
               name="screen.size"
               onChange={onInputsChange}
             />
           </Box>
+
           <Box
             sx={{
               display: "flex",
@@ -264,11 +238,12 @@ export const ModalProducts = ({ open, handleClose, imageUrl, setImageUrl }) => {
           >
             <Button
               onClick={() => {
-                updateProduct(currentInputProduct._id, currentInputProduct);
+                console.log(newProduct);
+                createProduct(newProduct);
                 handleClose();
               }}
             >
-              Actualizar
+              Ingresar producto
             </Button>
             <Button onClick={handleClose}>Cancelar</Button>
           </Box>
