@@ -12,6 +12,7 @@ export const types = {
     get: "GET [Product]",
     getAll: "GET_ALL [Product]",
     setCurrent: "SET_CURRENT [Product]",
+    searchByBrand: "SEARCH_BY_BRAND [Product]",
     
     errorMsg: "ERROR [Product]",
   },

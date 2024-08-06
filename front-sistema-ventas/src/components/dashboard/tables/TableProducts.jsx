@@ -19,6 +19,7 @@ import ImageSearchIcon from "@mui/icons-material/ImageSearch";
 import { ModalProducts } from "./ModalProducts";
 import { ModalImage } from "./ModalImage";
 import { ModalAdd } from "./ModalAdd";
+import { Search } from "../Loader/Search";
 
 export const TableProducts = ({ products }) => {
   const { deleteProduct, setCurrentProduct, createProduct } =
@@ -87,13 +88,23 @@ export const TableProducts = ({ products }) => {
 
   return (
     <Box>
-      <Button
-        sx={{ marginBottom: "10px" }}
-        variant="contained"
-        onClick={createNewProduct}
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          marginBottom: "10px",
+        }}
       >
-        agregar Productos
-      </Button>
+        <Button
+          sx={{ marginBottom: "10px" }}
+          variant="contained"
+          onClick={createNewProduct}
+        >
+          agregar Productos
+        </Button>
+
+        <Search />
+      </Box>
 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
@@ -125,22 +136,38 @@ export const TableProducts = ({ products }) => {
                 <TableCell component="th" scope="row">
                   {product.name}
                 </TableCell>
-                <TableCell align="right">{product.brand}</TableCell>
-                <TableCell align="right">{product.model}</TableCell>
-                <TableCell align="right">{product.battery.capacity}</TableCell>
-                <TableCell align="right">
+                <TableCell sx={{ fontWeight: "bold" }} align="right">
+                  {product.brand}
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="right">
+                  {product.model}
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="right">
+                  {product.battery.capacity}
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="right">
                   {product.mainCamera.resolution}
                 </TableCell>
-                <TableCell align="right">{product.memory.ram}</TableCell>
-                <TableCell align="right">{product.memory.storage}</TableCell>
-                <TableCell align="right">
+                <TableCell sx={{ fontWeight: "bold" }} align="right">
+                  {product.memory.ram}
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="right">
+                  {product.memory.storage}
+                </TableCell>
+                <TableCell sx={{ fontWeight: "bold" }} align="right">
                   <IconButton
                     onClick={() => ModalImage(product.model, product.image)}
                   >
                     <ImageSearchIcon />
                   </IconButton>
                 </TableCell>
-                <TableCell align="right">{product.stock}</TableCell>
+                <TableCell
+                  sx={{ fontWeight: "bold" }}
+                  align="right"
+                  {...(product.stock <= 3 && { style: { color: "red" } })}
+                >
+                  {product.stock}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

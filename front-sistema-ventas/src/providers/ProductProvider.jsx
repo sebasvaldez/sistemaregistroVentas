@@ -16,11 +16,12 @@ export const ProductProvider = ({ children }) => {
   const initialValues = {
     products: [],
     currentProduct: {},
+    productsByBrand: [],
+    errorMsg: "",
+    
   };
 
-
   const [state, dispatch] = useReducer(ProductsReducer, initialValues);
-
 
   const getAllProducts = async () => {
     dispatch({
@@ -34,7 +35,6 @@ export const ProductProvider = ({ children }) => {
         type: types.product.getAll,
         payload: products,
       });
-
     } catch (error) {
       dispatch({
         type: types.product.errorMsg,
@@ -43,6 +43,27 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
+  const getProductByBrand = async (brand) => {
+    try {
+      const { data } = await getProductRequest(brand);
+      const products = data;
+      dispatch({
+        type: types.product.searchByBrand,
+        payload: products,
+      });
+
+      return data;
+    } catch (error) {
+      console.log(error.response.data[0]);
+    }
+  };
+
+  const cleanSearch = () => {
+    dispatch({
+      type: types.product.searchByBrand,
+      payload: [],
+    });
+  };
 
   const createProduct = async (product) => {
     dispatch({
@@ -53,7 +74,6 @@ export const ProductProvider = ({ children }) => {
       await addProductRequest(product);
       dispatch({
         type: types.product.add,
-        
       });
 
       getAllProducts();
@@ -63,8 +83,7 @@ export const ProductProvider = ({ children }) => {
         payload: error.response.data[0],
       });
     }
-
-  }
+  };
 
   const deleteProduct = async (id) => {
     dispatch({
@@ -133,14 +152,12 @@ export const ProductProvider = ({ children }) => {
       if (!resp.ok) throw new Error("Error al subir la imagen");
       const cloudResp = await resp.json();
 
-
       return cloudResp.secure_url;
     } catch (error) {
       console.log(error);
       throw new Error(error.message);
     }
   };
-
 
   return (
     <ProductsContext.Provider
@@ -153,7 +170,9 @@ export const ProductProvider = ({ children }) => {
         updateProduct,
         fileUpload,
         setCurrentProduct,
-        isLoading
+        isLoading,
+        getProductByBrand,
+        cleanSearch,
       }}
     >
       {children}

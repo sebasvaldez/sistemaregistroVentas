@@ -35,12 +35,25 @@ export const createProduct = async (req, res) => {
   }
 };
 
-export const getProduct = async (req, res) => {
-  const { id } = req.params;
+// export const getProduct = async (req, res) => {
+//   const { id } = req.params;
+//   try {
+//     const product = await Product.findById(id);
+//     if (!product) return res.status(404).json(["Product not found"]);
+//     res.json(product);
+//   } catch (error) {
+//     return res.status(500).json([error.message]);
+//   }
+// };
+
+
+
+export const getProductByBrand = async (req, res) => {
+  const { brand } = req.params;
   try {
-    const product = await Product.findById(id);
-    if (!product) return res.status(404).json(["Product not found"]);
-    res.json(product);
+    const brandFound = await Product.find({ brand: new RegExp(brand, "i") });
+    if (!brandFound) return res.status(404).json(["Brand not found"]);
+    res.json(brandFound);
   } catch (error) {
     return res.status(500).json([error.message]);
   }

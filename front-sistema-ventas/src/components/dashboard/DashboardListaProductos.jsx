@@ -5,7 +5,7 @@ import { ProductsContext } from "../../contexts/ProductsContext.jsx";
 export const DashboardListaProductos = () => {
   const { state, getAllProducts } = useContext(ProductsContext);
 
-  const { products, isLoading } = state;
+  const { products, isLoading,productsByBrand } = state;
 
   useEffect(() => {
     getAllProducts();
@@ -16,7 +16,7 @@ export const DashboardListaProductos = () => {
       {isLoading ? (
         <h1>Cargando...</h1>
       ) : (
-        <div>{<TableProducts products={products} />}</div>
+        productsByBrand.length > 0 ? <TableProducts products={productsByBrand} /> : <TableProducts products={products} />
       )}
     </>
   );

@@ -26,14 +26,18 @@ export const logoutRequest = async () => axiosConnection.post("/logout");
 export const addProductRequest = async (product) =>
   axiosConnection.post("/create-product", product);
 
+
 export const getProductsRequest = async () =>
   axiosConnection.get("/get-products");
 
-export const getProductRequest = async (id) =>
-  axiosConnection.get(`/get-product/${id}`);
+
+export const getProductRequest = async (brand) =>
+  axiosConnection.get(`/get-product/${brand}` );
+
 
 export const deleteProductRequest = async (id) =>
   axiosConnection.delete(`/delete-product/${id}`);
+
 
 export const updateProductRequest = async (id, product) =>
   axiosConnection.put(`/update-product/${id}`, product);

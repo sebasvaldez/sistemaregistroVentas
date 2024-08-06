@@ -14,25 +14,28 @@ export const ProductsReducer = (state = [], action) => {
         product: action.payload || {},
       };
 
-    // case types.product.update:
-    //   return {
-    //     ...state,
-    //     isLoading: false,
-    //     product: action.payload,
-    //   };
+    case types.product.update:
+      return {
+        ...state,
+        product: action.payload,
+      };
 
     case types.product.setCurrent:
       return {
         ...state,
         currentProduct: action.payload,
-        
       };
-
+    case types.product.searchByBrand:
+      return {
+        ...state,
+        productsByBrand: action.payload,
+      };
     case types.product.get:
       return {
         ...state,
         product: action.payload,
       };
+
     case types.product.getAll:
       return {
         ...state,
