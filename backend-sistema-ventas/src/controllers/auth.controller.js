@@ -34,6 +34,7 @@ export const register = async (req, res) => {
       username: userSaved.username,
       email: userSaved.email,
       rol: userSaved.rol,
+      picture: userSaved.picture,
       createdAt: userSaved.createdAt,
       updatedAt: userSaved.updatedAt,
     });
@@ -63,6 +64,7 @@ export const login = async (req, res) => {
       username: userFound.username,
       email: userFound.email,
       rol: userFound.rol,
+      picture: userFound.picture,
       createdAt: userFound.createdAt,
       updatedAt: userFound.updatedAt,
       token: token,
@@ -108,6 +110,7 @@ export const verifyToken = async (req, res) => {
       username: userFound.username,
       email: userFound.email,
       rol: userFound.rol,
+      picture: userFound.picture,
     });
   });
 };

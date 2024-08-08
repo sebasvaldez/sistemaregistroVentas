@@ -35,6 +35,7 @@ export const AppRoutes = () => {
             <SellerLayout />
           </PrivateRoutes>
         }
+        
       />
       <Route path="*" element={<NotFound />} />
     </Routes>

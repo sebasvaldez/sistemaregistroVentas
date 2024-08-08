@@ -4,9 +4,8 @@ import {
   verifyTokenRequest,
   logoutRequest,
   registerRequest,
-  axiosConnection,
 } from "../config/axiosConnection";
-import { useEffect, useReducer, useState } from "react";
+import { useReducer, useState } from "react";
 import { AuthReducer } from "../reducers/AuthReducer";
 import { types } from "../types/types";
 import Cookies from "js-cookie";
@@ -18,46 +17,36 @@ const initialValues = {
     name: "",
     rol: "",
     username: "",
+    picture: "",
   },
   isLogged: false,
   token: "",
   message: "",
 };
 export const AuthProvider = ({ children }) => {
-
-
-
   const [state, dispatch] = useReducer(AuthReducer, initialValues);
   const [loading, setLoading] = useState(true);
 
-
-  const register = async () =>{
+  const register = async () => {
     setLoading(true);
     try {
-      const {date} = await registerRequest(user);
-      console.log(date)
+      const { date } = await registerRequest(user);
+      console.log(date);
       setLoading(false);
-     
+
       Cookies.set("token", data.token);
 
       dispatch({
         type: types.auth.register,
-        payload: {message: "Usuario creado con exito"}
-      })
-
-
-
-      
-    } catch (error) {
-      
-    }
-  }
+        payload: { message: "Usuario creado con exito" },
+      });
+    } catch (error) {}
+  };
 
   const login = async (user) => {
-    
-    
     try {
       const { data } = await loginRequest(user);
+      console.log(data);
       setLoading(false);
       const objectStorage = {
         user: {
@@ -66,6 +55,7 @@ export const AuthProvider = ({ children }) => {
           name: data.name,
           username: data.username,
           rol: data.rol,
+          picture: data.picture,
         },
         isLogged: true,
         token: data.token,
@@ -117,6 +107,7 @@ export const AuthProvider = ({ children }) => {
           email: data.email,
           username: data.username,
           rol: data.rol,
+          picture: data.picture,
         },
         isLogged: true,
         token: cookies.token,
@@ -132,10 +123,6 @@ export const AuthProvider = ({ children }) => {
       console.log(error);
     }
   };
-
-
-
-
 
   return (
     <AuthContext.Provider value={{ state, login, loading, logout, checkToken }}>

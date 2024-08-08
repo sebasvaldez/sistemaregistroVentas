@@ -1,8 +1,6 @@
-import { Navigate, useRoutes, Outlet } from "react-router-dom";
-import { useState } from "react";
-import { AuthProvider } from "../providers/AuthProvider";
 
-export const PublicRoutes = ({ children, isLogged,rol }) => {
+
+export const PublicRoutes = ({ children, isLogged }) => {
  
   if (!isLogged) {
   

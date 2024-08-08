@@ -1,7 +1,7 @@
 import { LoginForm } from "../components/auth/LoginForm";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../contexts/Authcontext";
-import { Navigate, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 
 export const LoginPage = () => {
   const imagenes = [

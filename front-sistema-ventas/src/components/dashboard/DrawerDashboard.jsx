@@ -14,6 +14,9 @@ import {
   Toolbar,
   Typography,
   Button,
+  Card,
+  CardMedia,
+  CardActions,
 } from "@mui/material/";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
@@ -90,9 +93,47 @@ export const DrawerDashboard = (props) => {
   };
 
   const drawer = (
-    <div>
+    <div style={{ display: "flex", flexDirection: "column" }}>
       <Toolbar />
-      <Divider />
+      <Card
+        sx={{
+          maxWidth: "150",
+
+          alignSelf: "center",
+          border: "none",
+          boxShadow: "none",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <CardMedia
+          component="img"
+          image={state.user.picture}
+          alt="Profile picture"
+          sx={{
+            width: "150px",
+            height: "150px",
+            borderRadius: "50%",
+            boxShadow: "3",
+          }}
+        />
+
+        <CardActions>
+          <Button
+          
+          >
+            <Link
+              to="/dashboard/admin/profile"
+              style={{ textDecoration: "none", fontSize: "12px", color: "black" }}
+            >
+              Perfil
+            </Link>
+          </Button>
+        </CardActions>
+      </Card>
+
+      <Divider sx={{ marginTop: "20px" }} />
       <List>
         {["Vendedores", "Productos", "Ventas", "Clientes"].map((text) => (
           <ListItem key={text} disablePadding>
